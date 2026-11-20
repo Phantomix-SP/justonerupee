@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Just One Rupee | Every Rupee Counts — Support Phantomix</title>
+
+    <!-- Google Fonts: Poppins & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- QRCode.js CDN for Real Scannable UPI QR Generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+    <!-- Canvas Confetti CDN for Cute Celebratory Effect on Thank You -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        space: '#07081A',
+                        nebula: '#0E0B26',
+                        cardbg: '#131033',
+                        neonpurple: '#A855F7',
+                        neonpink: '#EC4899',
+                        goldlight: '#FACC15',
+                        golddeep: '#F59E0B',
+                    },
+                    fontFamily: {
+                        poppins: ['Poppins', 'sans-serif'],
+                        inter: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #07081A;
+            color: #F8FAFC;
+            background-image: 
+                radial-gradient(circle at 12% 18%, rgba(168, 85, 247, 0.16) 0%, transparent 45%),
+                radial-gradient(circle at 88% 22%, rgba(236, 72, 153, 0.14) 0%, transparent 45%),
+                radial-gradient(circle at 50% 85%, rgba(245, 158, 11, 0.08) 0%, transparent 50%);
+            background-attachment: fixed;
+        }
+
+        h1, h2, h3, h4, .font-heading {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .glass-panel {
+            background: rgba(19, 16, 51, 0.72);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 1px solid rgba(168, 85, 247, 0.22);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.55);
+        }
+
+        .gold-glow-border {
+            border: 1px solid rgba(250, 204, 21, 0.45);
+            box-shadow: 0 0 25px rgba(245, 158, 11, 0.18), inset 0 0 15px rgba(250, 204, 21, 0.06);
+        }
+
+        .magenta-glow-border {
+            border: 1px solid rgba(236, 72, 153, 0.45);
+            box-shadow: 0 0 25px rgba(236, 72, 153, 0.2);
+        }
+
+        .coin-float {
+            animation: floatCoin 4s ease-in-out infinite;
+        }
+
+        @keyframes floatCoin {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+        }
+
+        .page-transition {
+            animation: fadeSlideIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes fadeSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* QR Code Container Styling */
+        #qrcode img, #qrcode canvas {
+            margin: 0 auto;
+            border-radius: 12px;
+            display: block;
+        }
+
+        /* Hide number input arrows */
+        input[type=number]::-webkit-inner-spin-button, 
+        input[type=number]::-webkit-outer-spin-button { 
+            -webkit-appearance: none; 
+            margin: 0; 
+        }
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between antialiased selection:bg-neonpink selection:text-white">
+
+    <!-- Top Navigation Bar -->
+    <header class="sticky top-0 z-40 glass-panel border-b border-purple-500/20">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3.5 flex flex-wrap items-center justify-between gap-4">
+            <!-- Brand Logo & Wordmark -->
+            <button onclick="navigateTo('home')" class="flex items-center gap-3 text-left group focus:outline-none">
+                <!-- Inline Custom SVG Coin Logo matching brand emblem -->
+                <svg class="w-11 h-11 shrink-0 drop-shadow-[0_0_12px_rgba(236,72,153,0.65)] group-hover:scale-105 transition-transform" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="goldRimNav" x1="0" y1="0" x2="120" y2="120" gradientUnits="userSpaceOnUse">
+                            <stop offset="0%" stop-color="#FDE047"/>
+                            <stop offset="50%" stop-color="#F59E0B"/>
+                            <stop offset="100%" stop-color="#B45309"/>
+                        </linearGradient>
+                        <radialGradient id="coreBgNav" cx="50%" cy="50%" r="50%">
+                            <stop offset="0%" stop-color="#2E1065"/>
+                            <stop offset="100%" stop-color="#07081A"/>
+                        </radialGradient>
+                    </defs>
+                    <circle cx="60" cy="60" r="56" fill="url(#coreBgNav)" stroke="url(#goldRimNav)" stroke-width="6"/>
+                    <circle cx="60" cy="60" r="47" stroke="#EC4899" stroke-width="2.5" stroke-dasharray="4 3"/>
+                    <circle cx="60" cy="60" r="39" stroke="#A855F7" stroke-width="1.5" opacity="0.7"/>
+                    <text x="58" y="75" text-anchor="middle" fill="#FFFFFF" font-family="Poppins, sans-serif" font-weight="900" font-size="44" letter-spacing="-2">₹1</text>
+                </svg>
+                <div>
+                    <span class="font-heading font-extrabold text-lg sm:text-xl tracking-wide bg-gradient-to-r from-white via-purple-100 to-goldlight bg-clip-text text-transparent block leading-tight">
+                        JUST ONE RUPEE
+                    </span>
+                    <span class="text-[11px] font-medium text-purple-300/80 tracking-wider uppercase block">
+                        Support Phantomix
+                    </span>
+                </div>
+            </button>
+
+            <!-- Dedicated Page Switcher Tabs -->
+            <nav aria-label="Primary Navigation" class="flex items-center bg-space/80 p-1.5 rounded-2xl border border-purple-500/25 w-full sm:w-auto justify-between sm:justify-start">
+                <button id="nav-home" onclick="navigateTo('home')" class="nav-btn flex-1 sm:flex-none px-4 sm:px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 bg-gradient-to-r from-neonpurple to-neonpink text-white shadow-[0_0_15px_rgba(236,72,153,0.45)]">
+                    Home
+                </button>
+                <button id="nav-about" onclick="navigateTo('about')" class="nav-btn flex-1 sm:flex-none px-4 sm:px-5 py-2.5 rounded-xl text-sm font-semibold text-gray-300 hover:text-white transition-all duration-200">
+                    About
+                </button>
+                <button id="nav-support" onclick="navigateTo('support')" class="nav-btn flex-1 sm:flex-none px-4 sm:px-5 py-2.5 rounded-xl text-sm font-semibold text-gray-300 hover:text-white transition-all duration-200">
+                    Customer Support
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="flex-grow">
+
+        <!-- =========================================================
+             PAGE 1: HOME (Hero + Live Metrics + Auto-QR Generator)
+        ========================================================== -->
+        <section id="page-home" class="page-view page-transition max-w-6xl mx-auto px-4 sm:px-6 pt-8 pb-16">
+            
+            <!-- Hero Banner -->
+            <div class="glass-panel rounded-3xl p-6 sm:p-10 md:p-12 mb-10 relative overflow-hidden gold-glow-border">
+                <div class="absolute -top-24 -right-24 w-72 h-72 bg-neonpink/20 rounded-full blur-3xl pointer-events-none"></div>
+                <div class="absolute -bottom-24 -left-24 w-72 h-72 bg-neonpurple/20 rounded-full blur-3xl pointer-events-none"></div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
+                    <div class="lg:col-span-8 text-center lg:text-left">
+                        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-purple-950/80 border border-goldlight/40 text-goldlight text-xs font-semibold tracking-wider uppercase mb-5">
+                            <span class="w-2 h-2 rounded-full bg-goldlight animate-ping"></span>
+                            A Small Contribution. A Bigger Dream.
+                        </div>
+
+                        <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight leading-tight mb-4">
+                            Every <span class="bg-gradient-to-r from-goldlight via-amber-400 to-neonpink bg-clip-text text-transparent">Rupee</span> Counts.
+                        </h1>
+
+                        <p class="text-base sm:text-lg text-gray-200 leading-relaxed max-w-2xl mx-auto lg:mx-0 mb-6">
+                            You don't need to contribute ₹1 lakh to fuel innovation. You can contribute <strong class="text-goldlight font-semibold">just ₹1</strong>. Join our voluntary community support initiative powering the technology development of <strong class="text-white font-semibold">Phantomix</strong>.
+                        </p>
+
+                        <div class="flex flex-wrap items-center justify-center lg:justify-start gap-3 text-xs sm:text-sm text-purple-200">
+                            <span class="px-3.5 py-2 rounded-xl bg-space/70 border border-purple-500/30">100% Voluntary Support</span>
+                            <span class="px-3.5 py-2 rounded-xl bg-space/70 border border-purple-500/30">Zero Compulsory Minimum</span>
+                            <span class="px-3.5 py-2 rounded-xl bg-space/70 border border-purple-500/30">Public Progress Ledger</span>
+                        </div>
+                    </div>
+
+                    <!-- Large Custom SVG ₹1 Emblem -->
+                    <div class="lg:col-span-4 flex flex-col items-center justify-center">
+                        <div class="coin-float relative">
+                            <div class="absolute inset-0 bg-gradient-to-tr from-neonpurple via-neonpink to-goldlight rounded-full blur-2xl opacity-35"></div>
+                            <svg class="w-44 h-44 sm:w-52 sm:h-52 relative z-10 drop-shadow-[0_10px_25px_rgba(0,0,0,0.8)]" viewBox="0 0 240 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <defs>
+                                    <linearGradient id="heroGoldRing" x1="20" y1="20" x2="220" y2="220" gradientUnits="userSpaceOnUse">
+                                        <stop offset="0%" stop-color="#FEF08A"/>
+                                        <stop offset="35%" stop-color="#FACC15"/>
+                                        <stop offset="70%" stop-color="#F59E0B"/>
+                                        <stop offset="100%" stop-color="#B45309"/>
+                                    </linearGradient>
+                                    <radialGradient id="heroCoinCore" cx="50%" cy="50%" r="50%">
+                                        <stop offset="0%" stop-color="#3B0764"/>
+                                        <stop offset="65%" stop-color="#13092D"/>
+                                        <stop offset="100%" stop-color="#07081A"/>
+                                    </radialGradient>
+                                    <linearGradient id="rupeeGoldGrad" x1="70" y1="70" x2="125" y2="170" gradientUnits="userSpaceOnUse">
+                                        <stop offset="0%" stop-color="#FDE047"/>
+                                        <stop offset="100%" stop-color="#D97706"/>
+                                    </linearGradient>
+                                </defs>
+                                <!-- Outer Metallic Gold Coin Rim -->
+                                <circle cx="120" cy="120" r="110" fill="url(#heroCoinCore)" stroke="url(#heroGoldRing)" stroke-width="12"/>
+                                <!-- Neon Magenta Tech Ring -->
+                                <circle cx="120" cy="120" r="94" stroke="#EC4899" stroke-width="4"/>
+                                <!-- Geometric Tech Ticks -->
+                                <circle cx="120" cy="120" r="84" stroke="#A855F7" stroke-width="3" stroke-dasharray="6 6"/>
+                                <circle cx="120" cy="120" r="72" stroke="#6366F1" stroke-width="1.5" opacity="0.6"/>
+                                <!-- Bold ₹1 Symbol -->
+                                <text x="92" y="152" text-anchor="middle" fill="url(#rupeeGoldGrad)" font-family="Poppins, sans-serif" font-weight="900" font-size="86">₹</text>
+                                <text x="148" y="152" text-anchor="middle" fill="#FFFFFF" font-family="Poppins, sans-serif" font-weight="900" font-size="92">1</text>
+                            </svg>
+                        </div>
+                        <span class="mt-3 text-xs font-semibold tracking-widest uppercase text-goldlight/90">Official Campaign Emblem</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Live Transparency Progress Bar & Metric Cards -->
+            <div class="glass-panel rounded-3xl p-6 sm:p-8 mb-10 border border-purple-500/25">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+                    <div>
+                        <h2 class="text-xl sm:text-2xl font-bold text-white">Live Campaign Progress</h2>
+                        <p class="text-xs sm:text-sm text-gray-400">Verified public figures updated strictly after bank statement reconciliation.</p>
+                    </div>
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 text-xs font-semibold self-start sm:self-center">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                        Status: Active Awareness &amp; Launch Phase
+                    </span>
+                </div>
+
+                <!-- Progress Bar -->
+                <div class="mb-6">
+                    <div class="flex justify-between text-sm font-semibold mb-2">
+                        <span class="text-goldlight">Collected: ₹0 (0%)</span>
+                        <span class="text-purple-200">Initial Goal: ₹1,00,000+</span>
+                    </div>
+                    <div class="w-full h-4 bg-space rounded-full p-1 border border-purple-500/30 overflow-hidden">
+                        <div class="h-full bg-gradient-to-r from-neonpurple via-neonpink to-goldlight rounded-full transition-all duration-700" style="width: 2%;"></div>
+                    </div>
+                </div>
+
+                <!-- 4 Explicit Metric Cards -->
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="bg-space/80 rounded-2xl p-4 border border-goldlight/25">
+                        <p class="text-xs uppercase tracking-wider text-gray-400 mb-1">Total Collected</p>
+                        <p class="text-2xl sm:text-3xl font-extrabold text-goldlight font-heading">₹0</p>
+                    </div>
+                    <div class="bg-space/80 rounded-2xl p-4 border border-neonpink/25">
+                        <p class="text-xs uppercase tracking-wider text-gray-400 mb-1">Total Spent</p>
+                        <p class="text-2xl sm:text-3xl font-extrabold text-neonpink font-heading">₹0</p>
+                    </div>
+                    <div class="bg-space/80 rounded-2xl p-4 border border-neonpurple/25">
+                        <p class="text-xs uppercase tracking-wider text-gray-400 mb-1">Remaining Funds</p>
+                        <p class="text-2xl sm:text-3xl font-extrabold text-neonpurple font-heading">₹0</p>
+                    </div>
+                    <div class="bg-space/80 rounded-2xl p-4 border border-white/15">
+                        <p class="text-xs uppercase tracking-wider text-gray-400 mb-1">Proposed Target</p>
+                        <p class="text-2xl sm:text-3xl font-extrabold text-white font-heading">₹1,00,000</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interactive Contribution & Auto-QR Generator Section -->
+            <div id="contribute-box" class="glass-panel rounded-3xl p-6 sm:p-10 magenta-glow-border">
+                <div class="text-center max-w-2xl mx-auto mb-8">
+                    <span class="text-xs font-bold uppercase tracking-widest text-neonpink block mb-2">Direct UPI Contribution</span>
+                    <h2 class="text-2xl sm:text-4xl font-extrabold text-white mb-3">Choose Your Voluntary Amount</h2>
+                    <p class="text-sm sm:text-base text-gray-300">
+                        Select a suggested amount or type any amount of your choice. Your personalized UPI QR code will auto-generate immediately.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                    
+                    <!-- Left Column: Amount Selection & Direct UPI ID -->
+                    <div class="lg:col-span-7 space-y-6">
+                        <div>
+                            <label class="block text-sm font-semibold text-purple-200 mb-3">1. Quick Select Amount (INR)</label>
+                            <div class="grid grid-cols-3 sm:grid-cols-5 gap-3">
+                                <button type="button" onclick="setContributionAmount(1)" data-amt="1" class="quick-amt-btn py-3.5 px-3 rounded-2xl font-heading font-bold text-lg border transition-all bg-gradient-to-br from-neonpurple to-neonpink text-white border-goldlight shadow-[0_0_15px_rgba(236,72,153,0.4)]">
+                                    ₹1
+                                </button>
+                                <button type="button" onclick="setContributionAmount(5)" data-amt="5" class="quick-amt-btn py-3.5 px-3 rounded-2xl font-heading font-bold text-lg bg-space/80 text-white border border-purple-500/30 hover:border-neonpink transition-all">
+                                    ₹5
+                                </button>
+                                <button type="button" onclick="setContributionAmount(10)" data-amt="10" class="quick-amt-btn py-3.5 px-3 rounded-2xl font-heading font-bold text-lg bg-space/80 text-white border border-purple-500/30 hover:border-neonpink transition-all">
+                                    ₹10
+                                </button>
+                                <button type="button" onclick="setContributionAmount(51)" data-amt="51" class="quick-amt-btn py-3.5 px-3 rounded-2xl font-heading font-bold text-lg bg-space/80 text-white border border-purple-500/30 hover:border-neonpink transition-all">
+                                    ₹51
+                                </button>
+                                <button type="button" onclick="setContributionAmount(101)" data-amt="101" class="quick-amt-btn py-3.5 px-3 rounded-2xl font-heading font-bold text-lg bg-space/80 text-white border border-purple-500/30 hover:border-neonpink transition-all">
+                                    ₹101
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Custom Amount Input -->
+                        <div>
+                            <label for="custom-amount" class="block text-sm font-semibold text-purple-200 mb-2">
+                                2. Or Enter Any Custom Amount (₹)
+                            </label>
+                            <div class="flex flex-col sm:flex-row gap-3">
+                                <div class="relative flex-grow">
+                                    <span class="absolute left-4 top-1/2 -translate-y-1/2 text-goldlight font-heading font-bold text-xl">₹</span>
+                                    <input 
+                                        type="number" 
+                                        id="custom-amount" 
+                                        min="1" 
+                                        step="1" 
+                                        value="1" 
+                                        oninput="handleCustomAmountInput()"
+                                        class="w-full bg-space border-2 border-purple-500/40 focus:border-goldlight rounded-2xl py-3.5 pl-10 pr-4 text-white font-heading font-bold text-xl focus:outline-none transition-colors"
+                                    >
+                                </div>
+                                <button type="button" onclick="generateUpiQr(true)" class="px-6 py-3.5 rounded-2xl bg-gradient-to-r from-goldlight to-golddeep text-space font-heading font-extrabold text-base hover:brightness-110 transition-all shadow-[0_0_20px_rgba(245,158,11,0.35)] shrink-0">
+                                    Generate Payment QR
+                                </button>
+                            </div>
+                            <p id="amount-validation-msg" class="text-xs text-rose-400 mt-2 hidden">
+                                Please enter a valid contribution amount of at least ₹1.
+                            </p>
+                        </div>
+
+                        <!-- Official UPI ID Copy Box -->
+                        <div class="bg-space/90 rounded-2xl p-5 border border-purple-500/30">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-xs font-semibold uppercase tracking-wider text-gray-400">Official Campaign UPI ID</span>
+                                <span class="text-xs text-emerald-400 font-medium">Verified Handle</span>
+                            </div>
+                            <div class="flex items-center justify-between gap-3 bg-nebula p-3 rounded-xl border border-white/10">
+                                <code id="upi-handle-text" class="text-goldlight font-mono text-base sm:text-lg font-bold break-all">8168350829@amazonpay</code>
+                                <button type="button" onclick="copyUpiHandle()" class="px-4 py-2 rounded-xl bg-purple-600/30 hover:bg-neonpink text-white text-xs font-semibold border border-purple-400/30 transition-colors shrink-0">
+                                    Copy UPI
+                                </button>
+                            </div>
+                            <div id="upi-copy-toast" class="text-xs text-emerald-400 font-medium mt-2 hidden">
+                                ✓ Copied 8168350829@amazonpay to your clipboard!
+                            </div>
+                        </div>
+
+                        <!-- Honest Notice -->
+                        <div class="p-4 rounded-2xl bg-amber-500/10 border border-amber-400/30 text-xs text-amber-200/90 leading-relaxed">
+                            <strong>Voluntary Contribution Notice:</strong> Contributions are purely voluntary support for Phantomix's software &amp; web development. This is not a charity/NGO donation, does not carry 80G tax exemption, and does not grant company equity or financial returns.
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Auto-Generated QR Card + Done Button -->
+                    <div class="lg:col-span-5">
+                        <div id="qr-card-container" class="bg-space rounded-3xl p-6 border-2 border-goldlight/50 shadow-[0_0_35px_rgba(168,85,247,0.25)] text-center">
+                            <div class="inline-block px-3.5 py-1 rounded-full bg-neonpink/20 border border-neonpink/40 text-neonpink text-xs font-bold uppercase tracking-wider mb-3">
+                                Live Auto-Generated UPI QR
+                            </div>
+                            
+                            <p class="text-sm text-gray-300 mb-1">Scan with GPay, PhonePe, Paytm or Amazon Pay</p>
+                            <p class="text-2xl font-heading font-extrabold text-goldlight mb-4">
+                                Paying <span id="qr-display-amount">₹1</span>
+                            </p>
+
+                            <!-- White High-Contrast Frame for Scannable QR Code -->
+                            <div class="bg-white p-4 rounded-2xl inline-block shadow-inner mb-4">
+                                <div id="qrcode" class="w-[200px] h-[200px] flex items-center justify-center"></div>
+                            </div>
+
+                            <p class="text-[11px] text-gray-400 font-mono mb-5 break-all">
+                                Payee: Just One Rupee (8168350829@amazonpay)
+                            </p>
+
+                            <!-- Action Buttons: Direct UPI Intent + DONE Button -->
+                            <div class="space-y-3">
+                                <a id="upi-direct-link" href="upi://pay?pa=8168350829@amazonpay&pn=Just%20One%20Rupee&am=1&cu=INR&tn=Support%20Phantomix" class="block w-full py-3 px-4 rounded-xl bg-purple-600/30 hover:bg-purple-600/50 border border-purple-400/40 text-white font-semibold text-sm transition-all">
+                                    Open UPI App Directly (Mobile)
+                                </a>
+
+                                <button type="button" onclick="openThankYouModal()" class="w-full py-4 px-6 rounded-2xl bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-400 text-space font-heading font-extrabold text-base sm:text-lg shadow-[0_0_25px_rgba(52,211,153,0.45)] hover:scale-[1.02] active:scale-[0.99] transition-all flex items-center justify-center gap-2">
+                                    <span>✓</span> I Have Completed Payment / Done
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- =========================================================
+             PAGE 2: ABOUT (Completely Open, Zero Hidden Accordions)
+        ========================================================== -->
+        <section id="page-about" class="page-view page-transition hidden max-w-5xl mx-auto px-4 sm:px-6 pt-8 pb-16 space-y-8">
+            
+            <!-- Header Banner -->
+            <div class="glass-panel rounded-3xl p-6 sm:p-10 gold-glow-border">
+                <span class="text-xs font-bold uppercase tracking-widest text-goldlight block mb-2">Full Transparency &amp; Mission</span>
+                <h1 class="text-3xl sm:text-5xl font-extrabold text-white mb-4">About Just One Rupee &amp; Phantomix</h1>
+                <p class="text-gray-300 text-base sm:text-lg leading-relaxed">
+                    Every detail of our campaign, our technology roadmap, proposed fund allocation, and legal disclosures is published openly below with nothing hidden behind tabs or menus.
+                </p>
+            </div>
+
+            <!-- Two-Column Mission Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="glass-panel rounded-3xl p-6 sm:p-8 border border-purple-500/30">
+                    <div class="w-12 h-12 rounded-2xl bg-neonpink/20 border border-neonpink/40 flex items-center justify-center text-2xl mb-4">
+                        🪙
+                    </div>
+                    <h2 class="text-2xl font-bold text-white mb-3">What is Just One Rupee?</h2>
+                    <p class="text-gray-300 text-sm sm:text-base leading-relaxed mb-4">
+                        <strong>Just One Rupee (JOR)</strong> is a community-powered voluntary support initiative created to back the development and growth of Phantomix. Our core philosophy is simple: supporting innovation shouldn't require deep pockets.
+                    </p>
+                    <p class="text-gray-300 text-sm sm:text-base leading-relaxed">
+                        Whether someone contributes <strong>₹1, ₹5, ₹10, ₹51, ₹101</strong>, or any amount they comfortably choose, every single rupee helps sustain engineering, hosting, and product design. There is zero pressure and zero compulsory amount.
+                    </p>
+                </div>
+
+                <div class="glass-panel rounded-3xl p-6 sm:p-8 border border-purple-500/30">
+                    <div class="w-12 h-12 rounded-2xl bg-neonpurple/20 border border-neonpurple/40 flex items-center justify-center text-2xl mb-4">
+                        🚀
+                    </div>
+                    <h2 class="text-2xl font-bold text-white mb-3">What is Phantomix?</h2>
+                    <p class="text-gray-300 text-sm sm:text-base leading-relaxed mb-4">
+                        <strong>Phantomix</strong> is an independent, technology-focused startup project dedicated to building practical web-based tools, digital utilities, and modern applications designed for everyday creators and internet users.
+                    </p>
+                    <p class="text-gray-300 text-sm sm:text-base leading-relaxed">
+                        <strong>Entity Status Disclosure:</strong> Phantomix is currently an early-stage, unregistered startup project. It is <em>not</em> a registered Private Limited company, NGO, charitable trust, or non-profit organization.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Proposed Fund Utilisation Table (Complete & Visible) -->
+            <div class="glass-panel rounded-3xl p-6 sm:p-8 border border-purple-500/30">
+                <div class="mb-6">
+                    <span class="text-xs font-bold uppercase tracking-wider text-neonpink">Initial ₹1,00,000 Target Breakdown</span>
+                    <h2 class="text-2xl sm:text-3xl font-bold text-white mt-1">Proposed Fund Utilisation</h2>
+                    <p class="text-sm text-gray-300 mt-2">
+                        Below is our preliminary budget allocation plan for the initial ₹1,00,000 target. These figures represent planned future allocation—not expenses already incurred.
+                    </p>
+                </div>
+
+                <div class="overflow-x-auto rounded-2xl border border-purple-500/30">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-space text-purple-200 text-xs sm:text-sm uppercase tracking-wider border-b border-purple-500/30">
+                                <th class="py-4 px-5 font-bold">Allocation Category</th>
+                                <th class="py-4 px-5 font-bold">Purpose &amp; Scope</th>
+                                <th class="py-4 px-5 font-bold text-right">Share</th>
+                                <th class="py-4 px-5 font-bold text-right">Proposed Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-purple-500/20 text-sm text-gray-200 bg-nebula/60">
+                            <tr>
+                                <td class="py-4 px-5 font-semibold text-white">Product Development</td>
+                                <td class="py-4 px-5 text-gray-300">Core software engineering, APIs, and web utility builds</td>
+                                <td class="py-4 px-5 text-right text-purple-300">30%</td>
+                                <td class="py-4 px-5 text-right font-heading font-bold text-goldlight">₹30,000</td>
+                            </tr>
+                            <tr>
+                                <td class="py-4 px-5 font-semibold text-white">Security &amp; Privacy</td>
+                                <td class="py-4 px-5 text-gray-300">SSL, DDoS protection, data encryption, and vulnerability audits</td>
+                                <td class="py-4 px-5 text-right text-purple-300">20%</td>
+                                <td class="py-4 px-5 text-right font-heading font-bold text-goldlight">₹20,000</td>
+                            </tr>
+                            <tr>
+                                <td class="py-4 px-5 font-semibold text-white">Infrastructure &amp; Hosting</td>
+                                <td class="py-4 px-5 text-gray-300">Cloud servers, databases, domains, and CDN bandwidth</td>
+                                <td class="py-4 px-5 text-right text-purple-300">15%</td>
+                                <td class="py-4 px-5 text-right font-heading font-bold text-goldlight">₹15,000</td>
+                            </tr>
+                            <tr>
+                                <td class="py-4 px-5 font-semibold text-white">Design &amp; User Experience</td>
+                                <td class="py-4 px-5 text-gray-300">UI/UX interface systems, accessibility, and brand assets</td>
+                                <td class="py-4 px-5 text-right text-purple-300">10%</td>
+                                <td class="py-4 px-5 text-right font-heading font-bold text-goldlight">₹10,000</td>
+                            </tr>
+                            <tr>
+                                <td class="py-4 px-5 font-semibold text-white">Testing &amp; Quality Assurance</td>
+                                <td class="py-4 px-5 text-gray-300">Cross-device testing, bug resolution, and performance tuning</td>
+                                <td class="py-4 px-5 text-right text-purple-300">10%</td>
+                                <td class="py-4 px-5 text-right font-heading font-bold text-goldlight">₹10,000</td>
+                            </tr>
+                            <tr>
+                                <td class="py-4 px-5 font-semibold text-white">Legal, Accounting &amp; Admin</td>
+                                <td class="py-4 px-5 text-gray-300">CA consultation, compliance bookkeeping, and documentation</td>
+                                <td class="py-4 px-5 text-right text-purple-300">10%</td>
+                                <td class="py-4 px-5 text-right font-heading font-bold text-goldlight">₹10,000</td>
+                            </tr>
+                            <tr>
+                                <td class="py-4 px-5 font-semibold text-white">Contingency Reserve</td>
+                                <td class="py-4 px-5 text-gray-300">Emergency server scaling or unforeseen operational costs</td>
+                                <td class="py-4 px-5 text-right text-purple-300">5%</td>
+                                <td class="py-4 px-5 text-right font-heading font-bold text-goldlight">₹5,000</td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr class="bg-space border-t-2 border-goldlight/40 font-heading font-extrabold text-base">
+                                <td colspan="2" class="py-4 px-5 text-white">TOTAL PROPOSED TARGET</td>
+                                <td class="py-4 px-5 text-right text-goldlight">100%</td>
+                                <td class="py-4 px-5 text-right text-goldlight text-lg">₹1,00,000</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Open Legal, Voluntary Contribution & Privacy Disclosures -->
+            <div class="glass-panel rounded-3xl p-6 sm:p-8 border border-purple-500/30 space-y-6">
+                <h2 class="text-2xl font-bold text-white">Voluntary Contribution Terms &amp; Legal Disclosures</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm text-gray-300 leading-relaxed">
+                    <div class="bg-space/70 p-5 rounded-2xl border border-white/10">
+                        <h3 class="font-bold text-goldlight text-base mb-2">1. No Equity, Returns, or Repayment</h3>
+                        <p>
+                            Contributions made to Just One Rupee are unconditional voluntary gifts/support for the Phantomix project. Contributors do not receive shares, equity, profit-sharing, debt repayment, or guaranteed commercial returns.
+                        </p>
+                    </div>
+                    <div class="bg-space/70 p-5 rounded-2xl border border-white/10">
+                        <h3 class="font-bold text-goldlight text-base mb-2">2. Not a Tax-Exempt Charity</h3>
+                        <p>
+                            Neither Just One Rupee nor Phantomix is registered as a Section 8 company, trust, or society under Indian law. Contributions are not eligible for Section 80G income tax deductions.
+                        </p>
+                    </div>
+                    <div class="bg-space/70 p-5 rounded-2xl border border-white/10">
+                        <h3 class="font-bold text-goldlight text-base mb-2">3. Payment Recipient &amp; Bookkeeping</h3>
+                        <p>
+                            All UPI contributions sent to <code class="text-neonpink">8168350829@amazonpay</code> are logged for transparent accounting. Financial summaries showing total received, spent, and remaining balance are published openly on our Home dashboard.
+                        </p>
+                    </div>
+                    <div class="bg-space/70 p-5 rounded-2xl border border-white/10">
+                        <h3 class="font-bold text-goldlight text-base mb-2">4. Privacy &amp; Data Protection</h3>
+                        <p>
+                            We do not sell, rent, or publicly expose supporter phone numbers, bank details, or personal addresses. Any details shared via our Customer Support page are used strictly to resolve your inquiry.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- =========================================================
+             PAGE 3: CUSTOMER SUPPORT (Dedicated Support & Open FAQs)
+        ========================================================== -->
+        <section id="page-support" class="page-view page-transition hidden max-w-5xl mx-auto px-4 sm:px-6 pt-8 pb-16 space-y-8">
+            
+            <!-- Support Header -->
+            <div class="glass-panel rounded-3xl p-6 sm:p-10 magenta-glow-border">
+                <span class="text-xs font-bold uppercase tracking-widest text-neonpink block mb-2">Supporter Assistance &amp; Grievance Desk</span>
+                <h1 class="text-3xl sm:text-5xl font-extrabold text-white mb-4">Customer Support</h1>
+                <p class="text-gray-300 text-base sm:text-lg leading-relaxed max-w-3xl">
+                    Have a question about your UPI transaction, want to verify a UTR reference number, or need clarification on how funds are used? Reach out directly—we respond transparently to every message.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                
+                <!-- Left Column: Direct Contact Info & Open FAQ List -->
+                <div class="lg:col-span-6 space-y-6">
+                    
+                    <!-- Direct Support Channels -->
+                    <div class="glass-panel rounded-3xl p-6 border border-purple-500/30 space-y-4">
+                        <h2 class="text-xl font-bold text-white">Direct Contact &amp; Verification</h2>
+                        
+                        <div class="p-4 rounded-2xl bg-space/80 border border-white/10">
+                            <p class="text-xs uppercase tracking-wider text-gray-400">Official Support &amp; Grievance Email</p>
+                            <p class="text-base sm:text-lg font-bold text-goldlight mt-1 select-all">support@justonerupee.in</p>
+                            <p class="text-xs text-gray-400 mt-1">Average response time: Within 24 to 48 hours</p>
+                        </div>
+
+                        <div class="p-4 rounded-2xl bg-space/80 border border-white/10">
+                            <p class="text-xs uppercase tracking-wider text-gray-400">Official UPI Handle for Verification</p>
+                            <p class="text-base font-mono font-bold text-neonpink mt-1">8168350829@amazonpay</p>
+                            <p class="text-xs text-gray-400 mt-1">Always verify this exact UPI ID before approving any payment request.</p>
+                        </div>
+                    </div>
+
+                    <!-- Open, Fully Visible FAQ List (Nothing Hidden) -->
+                    <div class="glass-panel rounded-3xl p-6 border border-purple-500/30 space-y-5">
+                        <h2 class="text-xl font-bold text-white">Frequently Asked Questions</h2>
+
+                        <div class="space-y-4">
+                            <div class="p-4 rounded-2xl bg-space/70 border border-purple-500/20">
+                                <h3 class="font-bold text-white text-sm sm:text-base mb-1.5">Q1. Why didn't the dashboard number increase immediately after I paid?</h3>
+                                <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">
+                                    Because we use direct zero-fee UPI transfers instead of an automated third-party payment gateway, every transaction is manually cross-checked against bank statements before updating the public ledger so that only 100% verified figures appear.
+                                </p>
+                            </div>
+
+                            <div class="p-4 rounded-2xl bg-space/70 border border-purple-500/20">
+                                <h3 class="font-bold text-white text-sm sm:text-base mb-1.5">Q2. What if I entered the wrong amount or sent a duplicate payment?</h3>
+                                <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">
+                                    Submit your 12-digit UPI Transaction Reference (UTR) number in the support form on this page within 7 days of payment, and our team will verify the credit and assist you promptly.
+                                </p>
+                            </div>
+
+                            <div class="p-4 rounded-2xl bg-space/70 border border-purple-500/20">
+                                <h3 class="font-bold text-white text-sm sm:text-base mb-1.5">Q3. Can I contribute just ₹1?</h3>
+                                <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">
+                                    Yes! ₹1 is the heart of this campaign. Select ₹1 on the Home page, scan the auto-generated QR code, and tap Done to record your gesture.
+                                </p>
+                            </div>
+
+                            <div class="p-4 rounded-2xl bg-space/70 border border-purple-500/20">
+                                <h3 class="font-bold text-white text-sm sm:text-base mb-1.5">Q4. Does Just One Rupee ever message people asking for money?</h3>
+                                <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">
+                                    Never. We never send spam DMs, cold calls, or payment links asking for money. All contributions happen strictly through our official website and social channels.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Interactive Support & Query Form -->
+                <div class="lg:col-span-6">
+                    <div class="glass-panel rounded-3xl p-6 sm:p-8 gold-glow-border">
+                        <h2 class="text-2xl font-bold text-white mb-2">Send a Support Message</h2>
+                        <p class="text-sm text-gray-300 mb-6">
+                            Fill out the form below for payment verification, transparency questions, or feedback.
+                        </p>
+
+                        <form id="support-form" onsubmit="handleSupportSubmit(event)" class="space-y-4">
+                            <div>
+                                <label for="sup-name" class="block text-xs font-semibold uppercase tracking-wider text-purple-200 mb-1.5">Your Name *</label>
+                                <input type="text" id="sup-name" required placeholder="Enter your full name" class="w-full bg-space border border-purple-500/40 focus:border-goldlight rounded-xl px-4 py-3 text-white text-sm focus:outline-none">
+                            </div>
+
+                            <div>
+                                <label for="sup-email" class="block text-xs font-semibold uppercase tracking-wider text-purple-200 mb-1.5">Email Address *</label>
+                                <input type="email" id="sup-email" required placeholder="you@example.com" class="w-full bg-space border border-purple-500/40 focus:border-goldlight rounded-xl px-4 py-3 text-white text-sm focus:outline-none">
+                            </div>
+
+                            <div>
+                                <label for="sup-utr" class="block text-xs font-semibold uppercase tracking-wider text-purple-200 mb-1.5">UPI Reference / UTR Number (Optional)</label>
+                                <input type="text" id="sup-utr" placeholder="e.g., 432198765432 (if asking about a payment)" class="w-full bg-space border border-purple-500/40 focus:border-goldlight rounded-xl px-4 py-3 text-white text-sm focus:outline-none">
+                            </div>
+
+                            <div>
+                                <label for="sup-topic" class="block text-xs font-semibold uppercase tracking-wider text-purple-200 mb-1.5">Inquiry Category *</label>
+                                <select id="sup-topic" class="w-full bg-space border border-purple-500/40 focus:border-goldlight rounded-xl px-4 py-3 text-white text-sm focus:outline-none">
+                                    <option value="Payment / UTR Verification">Payment / UTR Verification</option>
+                                    <option value="Fund Utilisation & Transparency Query">Fund Utilisation &amp; Transparency Query</option>
+                                    <option value="Refund / Duplicate Transaction Assistance">Refund / Duplicate Transaction Assistance</option>
+                                    <option value="General Feedback for Phantomix">General Feedback for Phantomix</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label for="sup-msg" class="block text-xs font-semibold uppercase tracking-wider text-purple-200 mb-1.5">Your Message *</label>
+                                <textarea id="sup-msg" rows="4" required placeholder="Write your question or details clearly here..." class="w-full bg-space border border-purple-500/40 focus:border-goldlight rounded-xl px-4 py-3 text-white text-sm focus:outline-none"></textarea>
+                            </div>
+
+                            <button type="submit" class="w-full py-4 px-6 rounded-2xl bg-gradient-to-r from-neonpurple to-neonpink text-white font-heading font-bold text-base shadow-[0_0_20px_rgba(236,72,153,0.4)] hover:brightness-110 transition-all">
+                                Submit Support Ticket
+                            </button>
+                        </form>
+
+                        <!-- Immediate Confirmation Box -->
+                        <div id="support-confirmation" class="hidden mt-6 p-5 rounded-2xl bg-emerald-500/15 border border-emerald-400/40 text-emerald-200 space-y-2">
+                            <div class="flex items-center gap-2 font-heading font-bold text-base text-emerald-300">
+                                <span>✓</span> Support Ticket Recorded!
+                            </div>
+                            <p id="support-confirm-details" class="text-xs sm:text-sm leading-relaxed"></p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="glass-panel border-t border-purple-500/20 mt-auto">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 py-8 flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left">
+            <div>
+                <p class="font-heading font-bold text-white text-base">JUST ONE RUPEE <span class="text-goldlight">• Every Rupee Counts.</span></p>
+                <p class="text-xs text-gray-400 mt-1">
+                    Voluntary community support campaign for Phantomix. Not a registered NGO or charity.
+                </p>
+            </div>
+            <div class="flex flex-wrap items-center justify-center gap-4 text-xs font-semibold text-purple-200">
+                <button onclick="navigateTo('home')" class="hover:text-goldlight transition-colors">Home</button>
+                <span>•</span>
+                <button onclick="navigateTo('about')" class="hover:text-goldlight transition-colors">About &amp; Disclosures</button>
+                <span>•</span>
+                <button onclick="navigateTo('support')" class="hover:text-goldlight transition-colors">Customer Support</button>
+            </div>
+        </div>
+    </footer>
+
+    <!-- =========================================================
+         CUTE CELEBRATORY THANK YOU MODAL (Triggered on 'Done')
+    ========================================================== -->
+    <div id="thankyou-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+        <div class="glass-panel max-w-md w-full rounded-3xl p-7 sm:p-9 text-center relative border-2 border-goldlight shadow-[0_0_50px_rgba(236,72,153,0.45)] page-transition">
+            
+            <!-- Cute Floating Badge -->
+            <div class="w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-tr from-neonpurple via-neonpink to-goldlight p-1 shadow-[0_0_25px_rgba(250,204,21,0.5)]">
+                <div class="w-full h-full bg-space rounded-full flex items-center justify-center text-4xl">
+                    💛
+                </div>
+            </div>
+
+            <span class="inline-block px-3.5 py-1 rounded-full bg-goldlight/15 border border-goldlight/40 text-goldlight text-xs font-bold uppercase tracking-wider mb-3">
+                You Are Awesome! ✨
+            </span>
+
+            <h2 class="text-2xl sm:text-3xl font-heading font-extrabold text-white mb-3">
+                Thank You So Much!
+            </h2>
+
+            <p class="text-gray-200 text-sm sm:text-base leading-relaxed mb-4">
+                Your voluntary contribution of <strong id="thankyou-amount-badge" class="text-goldlight font-heading text-lg">₹1</strong> means the world to us! Because of kind supporters like you, <strong class="text-white">Phantomix</strong> gets one step closer to building impactful tools for everyone.
+            </p>
+
+            <div class="bg-space/80 rounded-2xl p-4 border border-purple-500/30 mb-6 text-xs text-purple-200 leading-relaxed">
+                "A small contribution. A bigger dream." <br>
+                <span class="text-gray-400">Your transaction will be verified and reflected in our upcoming transparency update.</span>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-3">
+                <button type="button" onclick="closeThankYouModal()" class="flex-1 py-3.5 px-5 rounded-2xl bg-gradient-to-r from-neonpurple to-neonpink text-white font-heading font-bold text-sm hover:brightness-110 transition-all">
+                    Back to Campaign
+                </button>
+                <button type="button" onclick="closeThankYouModal(); navigateTo('about');" class="flex-1 py-3.5 px-5 rounded-2xl bg-space border border-purple-500/40 text-purple-200 hover:text-white font-heading font-semibold text-sm transition-all">
+                    See Fund Plan
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        let currentAmount = 1;
+        let qrCodeInstance = null;
+
+        // 1. Multi-Page Navigation Controller
+        function navigateTo(pageId) {
+            // Hide all pages
+            const pages = document.querySelectorAll('.page-view');
+            pages.forEach(page => page.classList.add('hidden'));
+
+            // Show selected page
+            const targetPage = document.getElementById(`page-${pageId}`);
+            if (targetPage) {
+                targetPage.classList.remove('hidden');
+            }
+
+            // Update active navbar button styles
+            const navButtons = document.querySelectorAll('.nav-btn');
+            navButtons.forEach(btn => {
+                btn.classList.remove('bg-gradient-to-r', 'from-neonpurple', 'to-neonpink', 'text-white', 'shadow-[0_0_15px_rgba(236,72,153,0.45)]');
+                btn.classList.add('text-gray-300');
+            });
+
+            const activeBtn = document.getElementById(`nav-${pageId}`);
+            if (activeBtn) {
+                activeBtn.classList.remove('text-gray-300');
+                activeBtn.classList.add('bg-gradient-to-r', 'from-neonpurple', 'to-neonpink', 'text-white', 'shadow-[0_0_15px_rgba(236,72,153,0.45)]');
+            }
+
+            // Smooth scroll to top on view switch
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // 2. Quick-Select Amount Handler
+        function setContributionAmount(amount) {
+            currentAmount = amount;
+            const inputField = document.getElementById('custom-amount');
+            inputField.value = amount;
+            document.getElementById('amount-validation-msg').classList.add('hidden');
+
+            // Highlight matching quick-select button
+            const buttons = document.querySelectorAll('.quick-amt-btn');
+            buttons.forEach(btn => {
+                const btnAmt = parseInt(btn.getAttribute('data-amt'), 10);
+                if (btnAmt === amount) {
+                    btn.className = 'quick-amt-btn py-3.5 px-3 rounded-2xl font-heading font-bold text-lg border transition-all bg-gradient-to-br from-neonpurple to-neonpink text-white border-goldlight shadow-[0_0_15px_rgba(236,72,153,0.4)]';
+                } else {
+                    btn.className = 'quick-amt-btn py-3.5 px-3 rounded-2xl font-heading font-bold text-lg bg-space/80 text-white border border-purple-500/30 hover:border-neonpink transition-all';
+                }
+            });
+
+            generateUpiQr(false);
+        }
+
+        // 3. Live Custom Amount Input Handler (Auto-updates QR as user types)
+        function handleCustomAmountInput() {
+            const inputField = document.getElementById('custom-amount');
+            const val = parseFloat(inputField.value);
+            const validationMsg = document.getElementById('amount-validation-msg');
+
+            // Reset quick-select highlights unless it matches one
+            const buttons = document.querySelectorAll('.quick-amt-btn');
+            buttons.forEach(btn => {
+                const btnAmt = parseInt(btn.getAttribute('data-amt'), 10);
+                if (btnAmt === val) {
+                    btn.className = 'quick-amt-btn py-3.5 px-3 rounded-2xl font-heading font-bold text-lg border transition-all bg-gradient-to-br from-neonpurple to-neonpink text-white border-goldlight shadow-[0_0_15px_rgba(236,72,153,0.4)]';
+                } else {
+                    btn.className = 'quick-amt-btn py-3.5 px-3 rounded-2xl font-heading font-bold text-lg bg-space/80 text-white border border-purple-500/30 hover:border-neonpink transition-all';
+                }
+            });
+
+            if (!isNaN(val) && val >= 1) {
+                currentAmount = Math.round(val * 100) / 100;
+                validationMsg.classList.add('hidden');
+                generateUpiQr(false);
+            } else {
+                validationMsg.classList.remove('hidden');
+            }
+        }
+
+        // 4. Real Scannable UPI QR Code Generator
+        function generateUpiQr(scrollToQr) {
+            const inputField = document.getElementById('custom-amount');
+            const val = parseFloat(inputField.value);
+            const validationMsg = document.getElementById('amount-validation-msg');
+
+            if (isNaN(val) || val < 1) {
+                validationMsg.classList.remove('hidden');
+                return;
+            }
+
+            validationMsg.classList.add('hidden');
+            currentAmount = Math.round(val * 100) / 100;
+
+            // Exact UPI Payment URI
+            const upiUri = `upi://pay?pa=8168350829@amazonpay&pn=Just%20One%20Rupee&am=${currentAmount}&cu=INR&tn=Support%20Phantomix`;
+
+            // Update displayed amount & mobile direct link
+            document.getElementById('qr-display-amount').textContent = `₹${currentAmount}`;
+            document.getElementById('upi-direct-link').setAttribute('href', upiUri);
+
+            // Clear previous QR and render new scannable QR
+            const qrContainer = document.getElementById('qrcode');
+            qrContainer.innerHTML = '';
+
+            if (typeof QRCode !== 'undefined') {
+                qrCodeInstance = new QRCode(qrContainer, {
+                    text: upiUri,
+                    width: 200,
+                    height: 200,
+                    colorDark: "#07081A",
+                    colorLight: "#FFFFFF",
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+            }
+
+            if (scrollToQr) {
+                const qrCard = document.getElementById('qr-card-container');
+                qrCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+
+        // 5. One-Click Copy UPI Handle
+        function copyUpiHandle() {
+            const upiText = "8168350829@amazonpay";
+            const tempInput = document.createElement("textarea");
+            tempInput.value = upiText;
+            tempInput.style.position = "fixed";
+            tempInput.style.left = "-9999px";
+            document.body.appendChild(tempInput);
+            tempInput.select();
+
+            try {
+                document.execCommand("copy");
+                const toast = document.getElementById("upi-copy-toast");
+                toast.classList.remove("hidden");
+                setTimeout(() => {
+                    toast.classList.add("hidden");
+                }, 3000);
+            } catch (err) {
+                console.error("Copy failed", err);
+            } finally {
+                document.body.removeChild(tempInput);
+            }
+        }
+
+        // 6. Cute Thank You Modal & Sparkles Triggered on 'Done'
+        function openThankYouModal() {
+            document.getElementById('thankyou-amount-badge').textContent = `₹${currentAmount}`;
+            const modal = document.getElementById('thankyou-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+
+            // Trigger celebratory confetti burst
+            if (typeof confetti === 'function') {
+                confetti({
+                    particleCount: 85,
+                    spread: 70,
+                    origin: { y: 0.6 },
+                    colors: ['#FACC15', '#EC4899', '#A855F7', '#34D399']
+                });
+            }
+        }
+
+        function closeThankYouModal() {
+            const modal = document.getElementById('thankyou-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        // 7. Customer Support Ticket Submission Handler
+        function handleSupportSubmit(event) {
+            event.preventDefault();
+            const name = document.getElementById('sup-name').value.trim();
+            const email = document.getElementById('sup-email').value.trim();
+            const topic = document.getElementById('sup-topic').value;
+            const utr = document.getElementById('sup-utr').value.trim();
+
+            const ticketId = "JOR-" + Math.floor(100000 + Math.random() * 900000);
+            const confirmBox = document.getElementById('support-confirmation');
+            const confirmDetails = document.getElementById('support-confirm-details');
+
+            confirmDetails.innerHTML = `Thank you, <strong>${name}</strong>! Your reference ID is <strong>${ticketId}</strong> under <em>${topic}</em>${utr ? ` (UTR: ${utr})` : ''}. A copy has been logged for <strong>${email}</strong>.`;
+            confirmBox.classList.remove('hidden');
+
+            document.getElementById('support-form').reset();
+        }
+
+        // Initialize Default ₹1 QR on Page Load
+        window.addEventListener('DOMContentLoaded', () => {
+            generateUpiQr(false);
+        });
+    </script>
+</body>
+</html>
